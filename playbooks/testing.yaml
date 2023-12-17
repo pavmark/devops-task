@@ -1,0 +1,17 @@
+---
+- name: Setup host
+  hosts: all
+  remote_user: root
+  become: true
+  tasks:
+
+    - name: Save current state of the firewall in system file
+      community.general.iptables_state:
+        ip_version: "{{ item.ip_version }}"
+        state: saved
+        path: "{{ item.path }}"
+      vars:
+        iptables_save_path:
+          - { ip_version: ipv4, path: /etc/iptables/rules.v4 }
+          - { ip_version: ipv6, path: /etc/iptables/rules.v6 }
+      loop: "{{ iptables_save_path }}"

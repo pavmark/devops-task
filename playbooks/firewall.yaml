@@ -1,0 +1,100 @@
+---
+- name: Firewall
+  hosts: all
+  remote_user: root
+  become: true
+  vars:
+    ports:
+      - { port: 80, protocol: tcp, jump: ACCEPT, chain: INPUT }
+      - { port: 443, protocol: tcp, jump: ACCEPT, chain: INPUT }
+      - { port: 8000, protocol: udp, jump: DROP, chain: INPUT }
+
+  tasks:
+    - name: Make sure iptables-persistent is installed
+      ansible.builtin.apt:
+        pkg:
+          - iptables-persistent
+        state: present
+        update_cache: true
+
+    - name: Temporarily set policy to ACCEPT
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: "{{ item }}"
+        policy: ACCEPT
+      loop: ['ipv4', 'ipv6']
+
+    - name: Iptables flush chains
+      ansible.builtin.iptables:
+        chain: "{{ item.1 }}"
+        ip_version: "{{ item.0 }}"
+        flush: true
+      loop: "{{ ['ipv4', 'ipv6'] | product(['INPUT', 'FORWARD', 'OUTPUT']) | list }}"
+
+  # Set Firewall rules
+    - name: Allow ESTABLISHED,RELATED
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: "{{ item }}"
+        ctstate: ESTABLISHED,RELATED
+        jump: ACCEPT
+      loop: ['ipv4', 'ipv6']
+
+    - name: Allow icmp
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: ipv4
+        protocol: icmp
+        jump: ACCEPT
+
+    - name: Allow icmpv6
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: ipv6
+        protocol: icmpv6
+        jump: ACCEPT
+
+    - name: Allow SSH
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: "{{ item }}"
+        protocol: tcp
+        destination_ports: 22
+        jump: ACCEPT
+      loop: ['ipv4', 'ipv6']
+
+    - name: Allow/Disallow ports IPv4
+      ansible.builtin.iptables:
+        chain: "{{ item.chain }}"
+        ip_version: ipv4
+        protocol: "{{ item.protocol }}"
+        destination_ports: "{{ item.port }}"
+        jump: "{{ item.jump }}"
+      loop: "{{ ports }}"
+
+    - name: Allow/Disallow ports IPv6
+      ansible.builtin.iptables:
+        chain: "{{ item.chain }}"
+        ip_version: ipv6
+        protocol: "{{ item.protocol }}"
+        destination_ports: "{{ item.port }}"
+        jump: "{{ item.jump }}"
+      loop: "{{ ports }}"
+
+    - name: Set the policy for the INPUT chain to DROP
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: "{{ item }}"
+        policy: DROP
+      loop: ['ipv4', 'ipv6']
+
+    - name: Save current state of the firewall in system file
+      community.general.iptables_state:
+        ip_version: "{{ item.ip_version }}"
+        state: saved
+        path: "{{ item.path }}"
+      vars:
+        iptables_save_path:
+          - { ip_version: ipv4, path: /etc/iptables/rules.v4 }
+          - { ip_version: ipv6, path: /etc/iptables/rules.v6 }
+      loop: "{{ iptables_save_path }}"
