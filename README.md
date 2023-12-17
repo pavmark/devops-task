@@ -32,3 +32,5 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 - Firewall je celkem basic, v mých variables není možnost nastavit třeba access jen z nějaké IP.
 
 - Firewall playbook nemaže chainy.
+
+- Playbook počítá s tím že se vše instaluje na fresh debian based vps. Upgradují se všechny package a používa se apt modul.
