@@ -33,4 +33,4 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 
 - Firewall playbook nemaže chainy.
 
-- Playbook počítá s tím že se vše instaluje na fresh debian based vps. Upgradují se všechny package a používa se apt modul.
+- Playbook počítá s tím že se vše instaluje na fresh debian based vps. Upgradují se všechny package a používá se apt modul.
