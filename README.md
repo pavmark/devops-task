@@ -93,5 +93,5 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 
 - Rebuildnul jsem pak hetzner vps abych testnul že to vše funguje jako celek a vše bylo ok.
 
-- Vzpomněl jsem si ještě že ty proxy a web servery vetšinou advertisuji svojí verzi. Ověřil jsem to přes firexo inspectnuti a bylo to tak. Kouknul jsem jak a vypnul jsem to pro top security trough obscurity. Nastaveni ngixnu bylo teda celkem bez problémů.
+- Vzpomněl jsem si ještě že ty proxy a web servery vetšinou advertisuji svojí verzi. Ověřil jsem to přes firex inspectnuti a bylo to tak. Kouknul jsem jak a vypnul jsem to pro top security trough obscurity. Nastaveni ngixnu bylo teda celkem bez problémů.
 
