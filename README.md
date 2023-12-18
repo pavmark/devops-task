@@ -34,3 +34,5 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 - Firewall playbook nemaže chainy.
 
 - Playbook počítá s tím že se vše instaluje na fresh debian based vps. Upgradují se všechny package a používá se apt modul.
+
+## Stage 2 - Prometheus a nginx

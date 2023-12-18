@@ -1,6 +1,0 @@
----
-- name: Firewall
-  ansible.builtin.import_playbook: firewall.yaml
-
-- name: Install docker
-  ansible.builtin.import_playbook: install_docker.yaml

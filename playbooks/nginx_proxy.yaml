@@ -1,0 +1,35 @@
+---
+- name: Setup Nginx proxy
+  hosts: all
+  remote_user: root
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Copy nginx proxy config
+      ansible.builtin.copy:
+        src: ../configs/nginx_proxy/
+        dest: /etc/docker/nginx_proxy
+        mode: "755"
+
+    - name: Create a Nginx proxy container
+      community.docker.docker_container:
+        name: nginx_proxy
+        image: nginx:1.25.3-bookworm
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        ports:
+          - "80:80"
+          - "443:443"
+        mounts:
+          - type: bind
+            target: /etc/nginx
+            source: /etc/docker/nginx_proxy
+            read_only: true
+
+        networks:
+          - name: nginx_network

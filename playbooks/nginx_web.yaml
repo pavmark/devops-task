@@ -1,0 +1,80 @@
+---
+- name: Setup Nginx web
+  hosts: all
+  remote_user: root
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Create web folder
+      ansible.builtin.file:
+        path: /var/www
+        state: directory
+        owner: "root"
+        group: "root"
+        mode: '0755'
+
+    - name: Copy web files
+      ansible.posix.synchronize:
+        src: ../web/
+        dest: /var/www
+        delete: true
+
+    - name: Change web files owner
+      ansible.builtin.file:
+        recurse: true
+        owner: "root"
+        group: "root"
+        path: /var/www/
+
+
+    - name: Copy nginx config
+      ansible.builtin.copy:
+        src: ../configs/nginx_web/
+        dest: /etc/docker/nginx_web
+        mode: "755"
+
+    - name: Create network
+      community.docker.docker_network:
+        name: nginx_network
+
+    - name: Create a Nginx web container
+      community.docker.docker_container:
+        name: nginx_web
+        image: nginx:1.25.3-bookworm
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        mounts:
+          - type: bind
+            target: /usr/share/nginx/html
+            source: /var/www
+            read_only: true
+
+          - type: bind
+            target: /etc/nginx
+            source: /etc/docker/nginx_web
+            read_only: true
+
+        networks:
+          - name: nginx_network
+
+    - name: Create a Nginx web exporter container
+      community.docker.docker_container:
+        name: nginx_exporter
+        image: nginx/nginx-prometheus-exporter:1.0
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        command:
+          - "--nginx.scrape-uri=http://Nginx_web:8081/stub_status"
+          - "--nginx.scrape-uri=http://Nginx_proxy:8081/stub_status"
+        networks:
+          - name: nginx_network
+          - name: monitoring

@@ -1,5 +1,5 @@
 ---
-- name: Setup host
+- name: Install Docker
   hosts: all
   remote_user: root
   become: true
@@ -53,6 +53,13 @@
 
     - name: Restart Docker and make sure it is enabled
       ansible.builtin.systemd:
-        name: docker.service
+        name: "{{ item }}"
         enabled: true
         state: restarted
+      loop: ['docker.service', 'containerd.service']
+
+    - name: Create config folder
+      ansible.builtin.file:
+        path: /etc/docker
+        state: directory
+        mode: '0755'

@@ -1,0 +1,74 @@
+---
+- name: Setup Prometheus
+  hosts: all
+  remote_user: root
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Copy Prometheus config
+      ansible.builtin.copy:
+        src: ../configs/prometheus.yaml
+        dest: /etc/docker/prometheus.yaml
+        mode: "644"
+
+    - name: Create network
+      community.docker.docker_network:
+        name: monitoring
+
+    - name: Create a Prometheus container
+      community.docker.docker_container:
+        name: prometheus
+        image: bitnami/prometheus:2.48.1
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        ports:
+          # - "127.0.0.1:9090:9090"
+          - "9090:9090"
+        mounts:
+          - type: volume
+            target: /opt/bitnami/prometheus/data
+            source: prometheus_data
+
+          - type: bind
+            target: /opt/bitnami/prometheus/conf/prometheus.yml
+            source: /etc/docker/prometheus.yaml
+        networks:
+          - name: monitoring
+
+    - name: Node exporter
+      community.docker.docker_container:
+        name: node_exporter
+        image: bitnami/node-exporter:1.7.0
+        command:
+          - "--path.procfs=/host/proc"
+          - "--path.rootfs=/rootfs"
+          - "--path.sysfs=/host/sys"
+          - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        mounts:
+          - type: bind
+            target: /host/proc
+            read_only: true
+            source: /proc
+
+          - type: bind
+            target: /host/sys
+            source: /sys
+            read_only: true
+
+          - type: bind
+            target: /rootfs
+            source: /
+            read_only: true
+        networks:
+          - name: monitoring

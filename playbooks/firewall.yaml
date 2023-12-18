@@ -7,7 +7,6 @@
     ports:
       - { port: 80, protocol: tcp, jump: ACCEPT, chain: INPUT }
       - { port: 443, protocol: tcp, jump: ACCEPT, chain: INPUT }
-      - { port: 8000, protocol: udp, jump: DROP, chain: INPUT }
 
   tasks:
     - name: Make sure iptables-persistent is installed
@@ -53,6 +52,14 @@
         ip_version: ipv6
         protocol: icmpv6
         jump: ACCEPT
+
+    - name: Allow local interface
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: "{{ item }}"
+        in_interface: lo
+        jump: ACCEPT
+      loop: ['ipv4', 'ipv6']
 
     - name: Allow SSH
       ansible.builtin.iptables:
