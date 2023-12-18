@@ -15,6 +15,18 @@
     - name: Create network
       community.docker.docker_network:
         name: monitoring
+        ipam_config:
+          - subnet: 172.28.0.0/16
+            iprange: 172.28.1.0/24
+            gateway: 172.28.0.1
+
+    - name: Allow local connection from monitoring network
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: ipv4
+        protocol: tcp
+        source: "172.28.1.0/24"
+        jump: ACCEPT
 
     - name: Create a Prometheus container
       community.docker.docker_container:
@@ -45,10 +57,9 @@
         name: node_exporter
         image: bitnami/node-exporter:1.7.0
         command:
-          - "--path.procfs=/host/proc"
-          - "--path.rootfs=/rootfs"
-          - "--path.sysfs=/host/sys"
-          - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+          - "--path.rootfs=/host"
+        pid_mode: host
+        network_mode: host
         state: started
         recreate: true
         pull: true
@@ -57,18 +68,7 @@
         force_kill: false
         mounts:
           - type: bind
-            target: /host/proc
+            propagation: rslave
+            target: /host
             read_only: true
-            source: /proc
-
-          - type: bind
-            target: /host/sys
-            source: /sys
-            read_only: true
-
-          - type: bind
-            target: /rootfs
             source: /
-            read_only: true
-        networks:
-          - name: monitoring
