@@ -10,7 +10,7 @@
       ansible.builtin.copy:
         src: ../configs/prometheus.yaml
         dest: /etc/docker/prometheus.yaml
-        mode: "644"
+        mode: "0644"
 
     - name: Create network
       community.docker.docker_network:

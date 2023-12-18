@@ -95,3 +95,9 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 
 - Vzpomněl jsem si ještě že ty proxy a web servery vetšinou advertisuji svojí verzi. Ověřil jsem to přes firefox inspectnuti a bylo to tak. Kouknul jsem jak a vypnul jsem to pro top security trough obscurity. Nastaveni ngixnu bylo teda celkem bez problémů.
 
+### Co by šlo zlepšit
+- Ten config nginx je hodně basic a není to nastaven třeba pro víc domén.
+
+## Stage 3.5 - Docker metrics
+
+- Došlo mi že jsem špatně pochopil to "Pouzijte Prometheus a prislusne exportery ke sberu metrik z ostatnich VM/kontejneru" že to má monitorovat metrics tech služeb v tom kontejenru. Podle docker docs jsem teda udělal config, zapnul metrics a přidal scrape target do promethea. Jen jsem upravil tu IP na ktere posloucha na IP gatewaye pro monitoring network.

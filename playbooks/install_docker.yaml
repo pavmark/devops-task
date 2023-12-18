@@ -51,6 +51,12 @@
         state: present
         update_cache: true
 
+    - name: Copy docker config
+      ansible.builtin.copy:
+        src: ../configs/daemon.json
+        dest: /etc/docker/daemon.json
+        mode: "0644"
+
     - name: Restart Docker and make sure it is enabled
       ansible.builtin.systemd:
         name: "{{ item }}"

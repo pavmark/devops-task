@@ -10,7 +10,7 @@
       ansible.builtin.copy:
         src: ../configs/nginx_proxy/
         dest: /etc/docker/nginx_proxy
-        mode: "755"
+        mode: "0755"
 
     - name: Create a Nginx proxy container
       community.docker.docker_container:
