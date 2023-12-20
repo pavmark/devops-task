@@ -56,8 +56,6 @@
       community.docker.docker_container:
         name: node_exporter
         image: bitnami/node-exporter:1.7.0
-        command:
-          - "--path.rootfs=/host"
         pid_mode: host
         network_mode: host
         state: started
@@ -66,6 +64,8 @@
         log_driver: journald
         restart_policy: always
         force_kill: false
+        command:
+          - "--path.rootfs=/host"
         mounts:
           - type: bind
             propagation: rslave

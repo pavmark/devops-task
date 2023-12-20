@@ -1,0 +1,37 @@
+---
+- name: Setup etcd cluster
+  hosts: all
+  remote_user: root
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Create etcd network
+      community.docker.docker_network:
+        name: etcd_network
+
+    - name: Create a etcd containers
+      community.docker.docker_container:
+        name: "etcd_{{ item }}"
+        image: quay.io/coreos/etcd:v3.5.11-arm64
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        force_kill: false
+        env:
+          ETCD_DATA_DIR: "/etcd-data"
+          ETCD_NAME: "etcd_{{ item }}"
+          ETCD_INITIAL_ADVERTISE_PEER_URLS: "http://etcd_{{ item }}:2380"
+          ETCD_LISTEN_PEER_URLS: "http://0.0.0.0:2380"
+          ETCD_ADVERTISE_CLIENT_URLS: "http://etcd_{{ item }}:2379"
+          ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+          ETCD_INITIAL_CLUSTER: "etcd_1=http://etcd_1:2380,etcd_2=http://etcd_2:2380,etcd_3=http://etcd_3:2380,etcd_4=http://etcd_4:2380,etcd_5=http://etcd_5:2380"
+        mounts:
+          - type: volume
+            target: /etcd-data
+            source: "etcd_{{ item }}_data"
+        networks:
+          - name: etcd_network
+      loop: "{{ range(1, 6)}}"

@@ -101,3 +101,7 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 ## Stage 3.5 - Docker metrics
 
 - Došlo mi že jsem špatně pochopil to "Pouzijte Prometheus a prislusne exportery ke sberu metrik z ostatnich VM/kontejneru" že to má monitorovat metrics tech služeb v tom kontejenru. Podle docker docs jsem teda udělal config, zapnul metrics a přidal scrape target do promethea. Jen jsem upravil tu IP na ktere posloucha na IP gatewaye pro monitoring network.
+
+## Stage 4 - etcd
+
+- Vybral jsem si 

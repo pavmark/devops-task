@@ -11,5 +11,8 @@
 - name: Setup Nginx web
   ansible.builtin.import_playbook: playbooks/nginx_web.yaml
 
+- name: Setup etcd cluster
+  ansible.builtin.import_playbook: playbooks/etcd.yaml
+
 - name: Setup Nginx proxy
   ansible.builtin.import_playbook: playbooks/nginx_proxy.yaml

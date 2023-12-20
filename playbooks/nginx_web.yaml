@@ -32,7 +32,7 @@
       ansible.builtin.copy:
         src: ../configs/nginx_web/
         dest: /etc/docker/nginx_web
-        mode: "0755"
+        mode: "0644"
 
     - name: Create network
       community.docker.docker_network:
