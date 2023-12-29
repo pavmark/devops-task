@@ -104,4 +104,34 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 
 ## Stage 4 - etcd
 
-- Vybral jsem si 
+- Vybral jsem si ETCD protože jsem s tím měl párkrát issue když jsem si rozbil k8s cluster. Třeba se o tom něco více dozvím.
+
+- Pamatoval jsem si že je potřeba mít 5 nodes ale radši jsem to double checknul. Pak jsem šel kouknout na nějaký guide jak to zprovoznit.
+
+- Původně jsem chtěl opět použít bitnami image ale ten mi nějak špatně fungoval. Pokážde to čekalo pár minut než to hodilo nejaký error nebo to bylo stuck na launchovani do nekonečna a bralo to vše cpu. Mixoval jsem par guidu dohromady a docs toho kontejneru. Tady jsem to chtěl nějak rychle zkusit zprovoznit a pak postupně měnit věci abych zjistl v čem byl issue. To ale nebyl uplně ideal approach protože jsem se nikam moc nedostal a neveděl v čem je vlatně problém. Pokaždé jsem nějaký fixnul a pak se objevil dalši ale o tom to třeba ani nic nepsalo jen to bylo stuck forever.
+
+- Rozhodl jsem se začít fresh a udělat to jen podle etcd guidu na docker v docker compose. Přes compose mi to hned rychle fungovalo a další step byl převést to do ansiblu. Převedení do ansiblu bylo taky celkem bez problémů.
+
+- Jelikož to má 5 nodes tak jsem se rozhodl využít nginx proxy kterou už mám na připojování pro load balancovani a health checkovani. V nginx jsem chtěl udělat active healtcheck protože to běžně používám na haproxy a je to cool. V nginxu mi to ale nešlo a pak jsem zjistil že to je jen pro paid verzi a free ma jen passive healthchecks což je hodně lame. Nastavil jsem teda passive.
+
+- Zkusil jsem si pak postupně zabíjet kontejnery a pomocí etcdctl checkovat jestli to je pořád healthy, fungovalo to správně.
+
+### Nedostatky
+
+- V etcd není nastaveno nic. Chtělo by to samozřejmě certifikáty a auth.
+
+- Servery se musí manuálně nastavit do nginx configu kdyby se měnil počet.
+
+- Musí se manuálně napsat ETCD_INITIAL_CLUSTER.
+
+## Daemontools
+
+- Nejdříve jsem chtěl podle jejich webu to stáhnout a zkompilovat. Dodal jsem gcc atd. pak tam ještě nebyla nějaká knihovna pro c++ tak jsem to taky dodal. Pak mi to ale failnulo na `/usr/bin/ld: errno: TLS definition in /usr/aarch64-linux-gnu/lib/libc.so.6 section .tbss mismatches non-TLS reference in envdir.o
+/usr/bin/ld: /usr/aarch64-linux-gnu/lib/libc.so.6: error adding symbols: bad value
+`
+
+- To už se mi nechtělo dál fixovat tak jsem pohledal a zjistil že na debian se dá prostě nainstalovat package.
+
+- Našel jsem si jeden celkem cool guide tak jsem to podle něho nejdřív udělla abych vůbec zjistil jak to funguje. Ta offical dokumentace mi přišla taková confusing. Tohle skoro hned fungovalo jen jsem musel dát ty soubory do jiné složky. V tom guidu to bylo zkompilovane tak to měl jinde, kouknul jsem na status systemd unity protože mi to nešlo a viděl jsem že to používa jiný directory. Po přesunutí to vše frčelo.
+
+- Teď jsem šel napsat vlastní bash script. Nejdříve jsem napsal část pro data VPS. Pro vps data jsem chtěl abusovat top ale to mi úplně nešlo protože v batch modu když se tam dá více iterací tak to printuje vícekrát. Já jsem to upravoval přes head a tail a to bralo pokaždé ten první který nebyl accurate protože to mělo málo datapointu. Nechtělo se mi s tím moc štvát tak jsem použil místo toho sysstat s mpstat. 
