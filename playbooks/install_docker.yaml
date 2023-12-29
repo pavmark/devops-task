@@ -3,8 +3,8 @@
   hosts: all
   remote_user: root
   become: true
-  vars:
-    host_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else ansible_architecture }}"
+  vars_files:
+    - ../vars/all/all.yaml
 
   tasks:
     - name: Update and upgrade packages

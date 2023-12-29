@@ -37,10 +37,8 @@
         pull: true
         log_driver: journald
         restart_policy: always
-        force_kill: false
         ports:
-          # - "127.0.0.1:9090:9090"
-          - "9090:9090"
+          - "127.0.0.1:9090:9090"
         mounts:
           - type: volume
             target: /opt/bitnami/prometheus/data
@@ -63,7 +61,6 @@
         pull: true
         log_driver: journald
         restart_policy: always
-        force_kill: false
         command:
           - "--path.rootfs=/host"
         mounts:

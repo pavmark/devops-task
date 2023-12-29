@@ -1,0 +1,2 @@
+#!/bin/sh
+exec multilog ssize 536870912 t /var/log/monitoring

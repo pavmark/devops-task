@@ -21,11 +21,11 @@
         pull: true
         log_driver: journald
         restart_policy: always
-        force_kill: false
         ports:
           - "80:80"
           - "443:443"
           - "127.0.0.1:2379:2379"
+          - "127.0.0.1:8081:8081"
         mounts:
           - type: bind
             target: /etc/nginx

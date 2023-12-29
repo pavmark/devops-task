@@ -47,7 +47,8 @@
         pull: true
         log_driver: journald
         restart_policy: always
-        force_kill: false
+        ports:
+          - "127.0.0.1:8082:8081"
         mounts:
           - type: bind
             target: /usr/share/nginx/html

@@ -1,0 +1,33 @@
+---
+- name: Daemontools
+  hosts: all
+  remote_user: root
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Install daemontools
+      ansible.builtin.apt:
+        pkg:
+          - daemontools
+          - daemontools-run
+          - sysstat
+        state: present
+
+    - name: Create directory for logs
+      ansible.builtin.file:
+        path: /var/log/monitoring/
+        state: directory
+        mode: '0755'
+
+    - name: Copy daemontools files
+      ansible.builtin.copy:
+        src: ../scripts/monitoring/
+        dest: /etc/service/monitoring/
+        mode: "0744"
+
+    - name: Restart daemontools
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: daemontools-run.service
+        enabled: true

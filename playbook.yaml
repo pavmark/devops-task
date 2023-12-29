@@ -16,3 +16,9 @@
 
 - name: Setup Nginx proxy
   ansible.builtin.import_playbook: playbooks/nginx_proxy.yaml
+
+- name: Daemontools monitoring
+  ansible.builtin.import_playbook: playbooks/daemontools.yaml
+
+- name: Grafana
+  ansible.builtin.import_playbook: playbooks/grafana.yaml
