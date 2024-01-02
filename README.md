@@ -1,8 +1,19 @@
 # Devops task
 ## About
 Je zde několik playbooku které importuje hlavní playbook ve složce playbooks.
-Je potřeba jen specifikovat hosta a spustit hlavní playbook.yaml a změnit si heslo v vars/grafana/admin.yaml
+Je potřeba jen specifikovat hosta a spustit hlavní playbook.yaml a změnit si heslo v vars/grafana/admin.yaml \
 
+Vše ma default porty
+
+- Grafana 3000
+
+- Prometheus 9090
+
+- Etcd 127.0.0.1:2379
+
+- Nginx proxy stub 127.0.0.1:8081
+
+- Nginx web stub 127.0.0.1:8082
 
 ## Stage 1 - Základní setup VPS, Install dockeru
 
@@ -158,3 +169,5 @@ Je potřeba jen specifikovat hosta a spustit hlavní playbook.yaml a změnit si 
 ## Stage 7 - Nginx keepalive
 
 - Koukl jsem co je potřeba přidat a také podle docs že je potřeba upravit header a http verzi. Chtěl jsem ověřit že to funguje tak jsem dočasně vypnul cachovani a kouknul na stub status nginxu kde je web. Zkusil jsem tam poslat několik requestů přes script a po ukončení zde zůstávalo pár connections ve waiting mezi webem a proxy takže to vypadá že to funguje.
+
+## Stage 8 - Finish
