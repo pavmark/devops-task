@@ -21,7 +21,6 @@
         pull: true
         log_driver: journald
         restart_policy: always
-        force_kill: false
         env:
           ETCD_DATA_DIR: "/etcd-data"
           ETCD_NAME: "etcd_{{ item }}"

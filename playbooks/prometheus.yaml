@@ -38,7 +38,7 @@
         log_driver: journald
         restart_policy: always
         ports:
-          - "127.0.0.1:9090:9090"
+          - "9090:9090"
         mounts:
           - type: volume
             target: /opt/bitnami/prometheus/data

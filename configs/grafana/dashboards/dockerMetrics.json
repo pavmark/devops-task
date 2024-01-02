@@ -35,8 +35,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -108,8 +107,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_container_states_containers",
@@ -124,8 +122,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -172,8 +169,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_health_checks_failed_total",
@@ -187,8 +183,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -238,8 +233,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_container_states_containers{state=\"running\"}",
@@ -250,8 +244,7 @@
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_container_states_containers{state=\"paused\"}",
@@ -263,8 +256,7 @@
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_container_states_containers{state=\"stopped\"}",
@@ -281,8 +273,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -358,8 +349,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_network_actions_seconds_count",
@@ -374,8 +364,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -418,8 +407,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_engine_cpus_cpus",
@@ -434,8 +422,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -512,8 +499,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "engine_daemon_events_total",
@@ -528,8 +514,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -572,8 +557,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "caa2bb72-9093-4afa-a152-820eabda83ac"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "engine_daemon_engine_memory_bytes / 1073741824",

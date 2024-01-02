@@ -1,6 +1,7 @@
 # Devops task
 ## About
 Je zde několik playbooku které importuje hlavní playbook ve složce playbooks.
+Je potřeba jen specifikovat hosta a spustit hlavní playbook.yaml a změnit si heslo v vars/grafana/admin.yaml
 
 
 ## Stage 1 - Základní setup VPS, Install dockeru
@@ -124,7 +125,7 @@ Je zde několik playbooku které importuje hlavní playbook ve složce playbooks
 
 - Musí se manuálně napsat ETCD_INITIAL_CLUSTER.
 
-## Daemontools
+## Stage 5 - Daemontools
 
 - Nejdříve jsem chtěl podle jejich webu to stáhnout a zkompilovat. Dodal jsem gcc atd. pak tam ještě nebyla nějaká knihovna pro c++ tak jsem to taky dodal. Pak mi to ale failnulo na `/usr/bin/ld: errno: TLS definition in /usr/aarch64-linux-gnu/lib/libc.so.6 section .tbss mismatches non-TLS reference in envdir.o
 /usr/bin/ld: /usr/aarch64-linux-gnu/lib/libc.so.6: error adding symbols: bad value

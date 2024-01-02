@@ -4,44 +4,34 @@
   remote_user: root
   become: true
   gather_facts: false
+  vars_files:
+    - ../vars/grafana/admin.yaml
   tasks:
 
-    # - name: Create a Grafana container
-    #   community.docker.docker_container:
-    #     name: grafana
-    #     image: pavmark/grafana-debian:release-10.0.10
-    #     state: started
-    #     recreate: true
-    #     pull: true
-    #     log_driver: journald
-    #     restart_policy: always
-    #     ports:
-    #       - "3000:3000"
-    #     networks:
-    #       - name: monitoring
+    - name: Copy nginx proxy config
+      ansible.builtin.copy:
+        src: ../configs/grafana/
+        dest: /etc/docker/grafana
+        mode: "0644"
 
-    - name: Add data source
-      grafana.grafana.datasource:
-        dataSource: |
-          {
-            "name": "Prometheushhh",
-            "type": "prometheus",
-            "access": "proxy",
-            "url": "http://prometheus:9090",
-            "jsonData": {
-              "httpMethod": "POST",
-              "manageAlerts": true,
-              "prometheusType": "Prometheus",
-              "cacheLevel": "High"
-            }
-          }
-        grafana_url: "http://127.0.0.1:3000"
-        grafana_api_key: "glsa_sc75rIwt33nNJqfIPdRXRP61LpQEVs5f_90cebb5b"
-
-    - name: Add docker dashboard
-      grafana.grafana.dashboard:
-        # dashboard: "../configs/grafana/dashboards/dockerMetrics.json"
-        dashboard: "{{ lookup('ansible.builtin.file', '../configs/grafana/dashboards/dockerMetrics.json') }}"
-        grafana_url: "http://127.0.0.1:3000"
-        grafana_api_key: "glsa_sc75rIwt33nNJqfIPdRXRP61LpQEVs5f_90cebb5b"
-        state: present
+    - name: Create a Grafana container
+      community.docker.docker_container:
+        name: grafana
+        image: pavmark/grafana-debian:release-10.0.10
+        state: started
+        recreate: true
+        pull: true
+        log_driver: journald
+        restart_policy: always
+        env:
+          GF_SECURITY_ADMIN_USER: "{{ GRAFANA_ADMIN_USER }}"
+          GF_SECURITY_ADMIN_PASSWORD: "{{ GRAFANA_ADMIN_PASSWORD }}"
+        ports:
+          - "3000:3000"
+        networks:
+          - name: monitoring
+        mounts:
+          - type: bind
+            target: /etc/grafana/provisioning/
+            source: /etc/docker/grafana/
+            read_only: true
