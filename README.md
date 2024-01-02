@@ -171,3 +171,5 @@ Vše ma default porty
 - Koukl jsem co je potřeba přidat a také podle docs že je potřeba upravit header a http verzi. Chtěl jsem ověřit že to funguje tak jsem dočasně vypnul cachovani a kouknul na stub status nginxu kde je web. Zkusil jsem tam poslat několik requestů přes script a po ukončení zde zůstávalo pár connections ve waiting mezi webem a proxy takže to vypadá že to funguje.
 
 ## Stage 8 - Finish
+
+Rebuildnul jsem VPS a ověřil že vše funguje. Pro jistotu jsem pak naklonoval repo přidal host file a oveřil že i to v pořádku funguje.
