@@ -20,14 +20,6 @@
             iprange: 172.28.1.0/24
             gateway: 172.28.0.1
 
-    - name: Allow local connection from monitoring network
-      ansible.builtin.iptables:
-        chain: INPUT
-        ip_version: ipv4
-        protocol: tcp
-        source: "172.28.1.0/24"
-        jump: ACCEPT
-
     - name: Create a Prometheus container
       community.docker.docker_container:
         name: prometheus

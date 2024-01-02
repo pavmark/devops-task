@@ -70,6 +70,14 @@
         jump: ACCEPT
       loop: ['ipv4', 'ipv6']
 
+    - name: Allow local connection from monitoring network
+      ansible.builtin.iptables:
+        chain: INPUT
+        ip_version: ipv4
+        protocol: tcp
+        source: "172.28.1.0/24"
+        jump: ACCEPT
+
     - name: Allow/Disallow ports IPv4
       ansible.builtin.iptables:
         chain: "{{ item.chain }}"
