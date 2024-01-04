@@ -1,9 +1,6 @@
 ---
 - name: Setup Grafana
   hosts: all
-  remote_user: root
-  become: true
-  gather_facts: false
   vars_files:
     - ../vars/grafana/admin.yaml
   tasks:

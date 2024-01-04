@@ -5,8 +5,14 @@
 - name: Install Docker
   ansible.builtin.import_playbook: playbooks/install_docker.yaml
 
+- name: Daemontools monitoring
+  ansible.builtin.import_playbook: playbooks/daemontools.yaml
+
 - name: Setup Prometheus
   ansible.builtin.import_playbook: playbooks/prometheus.yaml
+
+- name: Build Images
+  ansible.builtin.import_playbook: playbooks/docker-images.yaml
 
 - name: Setup Nginx web
   ansible.builtin.import_playbook: playbooks/nginx_web.yaml
@@ -16,9 +22,6 @@
 
 - name: Setup Nginx proxy
   ansible.builtin.import_playbook: playbooks/nginx_proxy.yaml
-
-- name: Daemontools monitoring
-  ansible.builtin.import_playbook: playbooks/daemontools.yaml
 
 - name: Grafana
   ansible.builtin.import_playbook: playbooks/grafana.yaml

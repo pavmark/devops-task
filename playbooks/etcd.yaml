@@ -1,9 +1,6 @@
 ---
 - name: Setup etcd cluster
   hosts: all
-  remote_user: root
-  become: true
-  gather_facts: false
   vars_files:
     - ../vars/all/all.yaml
   tasks:

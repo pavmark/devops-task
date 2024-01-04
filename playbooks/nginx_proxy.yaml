@@ -1,9 +1,6 @@
 ---
 - name: Setup Nginx proxy
   hosts: all
-  remote_user: root
-  become: true
-  gather_facts: false
   tasks:
 
     - name: Copy nginx proxy config
@@ -12,13 +9,18 @@
         dest: /etc/docker/nginx_proxy
         mode: "0644"
 
+    - name: Create log folder
+      ansible.builtin.file:
+        path: /var/log/monitoring/nginx_proxy
+        state: directory
+        mode: '0755'
+
     - name: Create a Nginx proxy container
       community.docker.docker_container:
         name: nginx_proxy
-        image: nginx:1.25.3-bookworm
+        image: nginx-1.25.3-daemontools:1.0.0
         state: started
         recreate: true
-        pull: true
         log_driver: journald
         restart_policy: always
         ports:
@@ -31,6 +33,10 @@
             target: /etc/nginx
             source: /etc/docker/nginx_proxy
             read_only: true
+
+          - type: bind
+            target: /var/log/monitoring
+            source: /var/log/monitoring/nginx_proxy
 
         networks:
           - name: nginx_network

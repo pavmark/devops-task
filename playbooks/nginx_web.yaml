@@ -1,9 +1,6 @@
 ---
 - name: Setup Nginx web
   hosts: all
-  remote_user: root
-  become: true
-  gather_facts: false
   tasks:
 
     - name: Create web folder
@@ -27,12 +24,17 @@
         group: "root"
         path: /var/www/
 
-
     - name: Copy nginx config
       ansible.builtin.copy:
         src: ../configs/nginx_web/
         dest: /etc/docker/nginx_web
         mode: "0644"
+
+    - name: Create log folder
+      ansible.builtin.file:
+        path: /var/log/monitoring/nginx_web
+        state: directory
+        mode: '0755'
 
     - name: Create network
       community.docker.docker_network:
@@ -41,10 +43,9 @@
     - name: Create a Nginx web container
       community.docker.docker_container:
         name: nginx_web
-        image: nginx:1.25.3-bookworm
+        image: nginx-1.25.3-daemontools:1.0.0
         state: started
         recreate: true
-        pull: true
         log_driver: journald
         restart_policy: always
         ports:
@@ -59,6 +60,10 @@
             target: /etc/nginx
             source: /etc/docker/nginx_web
             read_only: true
+
+          - type: bind
+            target: /var/log/monitoring
+            source: /var/log/monitoring/nginx_web
 
         networks:
           - name: nginx_network

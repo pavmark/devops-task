@@ -1,9 +1,6 @@
 ---
 - name: Setup Prometheus
   hosts: all
-  remote_user: root
-  become: true
-  gather_facts: false
   tasks:
 
     - name: Copy Prometheus config

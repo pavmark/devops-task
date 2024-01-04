@@ -1,14 +1,12 @@
 ---
 - name: Firewall
   hosts: all
-  remote_user: root
-  become: true
   vars:
     ports:
       - { port: 80, protocol: tcp, jump: ACCEPT, chain: INPUT }
       - { port: 443, protocol: tcp, jump: ACCEPT, chain: INPUT }
-
   tasks:
+
     - name: Make sure iptables-persistent is installed
       ansible.builtin.apt:
         pkg:
