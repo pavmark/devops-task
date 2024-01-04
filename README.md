@@ -15,6 +15,8 @@ Vše ma default porty
 
 - Nginx web stub 127.0.0.1:8082
 
+Logy z daemontools jsou ve /var/logs/monitoring/
+
 ## Stage 1 - Základní setup VPS, Install dockeru
 
 ### Thought Process
@@ -172,4 +174,4 @@ Vše ma default porty
 
 ## Stage 8 - Finish
 
-Rebuildnul jsem VPS a ověřil že vše funguje. Pro jistotu jsem pak naklonoval repo přidal host file a oveřil že i to v pořádku funguje. Zkusil jsem pak server restartovat jestli jsem něco nezapomněl a něměl jsem uložená pravidla pro povoleni docker networku tak jsem to opravil pak vše fungovalo.
+- Rebuildnul jsem VPS a ověřil že vše funguje. Pro jistotu jsem pak naklonoval repo přidal host file a oveřil že i to v pořádku funguje. Zkusil jsem pak server restartovat jestli jsem něco nezapomněl a něměl jsem uložená pravidla pro povoleni docker networku tak jsem to opravil pak vše fungovalo.

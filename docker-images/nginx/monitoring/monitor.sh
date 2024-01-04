@@ -1,10 +1,31 @@
 #!/bin/bash
 
-##VPS Load
-cpuUti=$( mpstat 1 1 | tail -n 1 | awk '{ print 100-$12}' )
-memoryUti=$( free -m | grep "Mem" | awk '{ print ($3 / $2)*100 }' )
+#Container Utilization
+cgroupPath="/sys/fs/cgroup/"
 
-echo "Container: $( hostname ), CPU: ${cpuUti}%, Memory: ${memoryUti}%"
+initialUsage=$(cat "$cgroupPath/cpu.stat" | grep "usage_usec" | awk '{print $2}')
+startTime=$(date +%s.%N)
+
+sleep 1
+
+currentUsage=$(cat "$cgroupPath/cpu.stat" | grep "usage_usec" | awk '{print $2}')
+elapsedTime=$(echo "$(date +%s.%N) - $startTime" | bc)
+cpuUtilization=$(echo "scale=2; 100 * ($currentUsage - $initialUsage) / ($elapsedTime * 1000000)" | bc)
+
+memoryMax=$( cat $cgroupPath/memory.max )
+memoryCurrent=$( cat $cgroupPath/memory.current )
+
+# If there isnt set memory limit use host memory
+
+if [ ${memoryMax} == "max" ]
+then
+memoryMax=$(cat /proc/meminfo  | grep MemTotal | awk '{print $2}')
+fi
+
+memoryUtilization=$( echo "scale=10; 100 * ( ${memoryCurrent} / (${memoryMax} * 1000) )" | bc )
+memoryUtilization=$( printf "%.2f\n" ${memoryUtilization} )
+
+echo "Container: $( hostname ), CPU: ${cpuUtilization}%, Memory: ${memoryUtilization}%"
 
 #Nginx stub status
 
